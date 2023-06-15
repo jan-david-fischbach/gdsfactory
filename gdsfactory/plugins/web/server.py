@@ -13,6 +13,9 @@ from starlette.endpoints import WebSocketEndpoint
 import gdsfactory as gf
 from gdsfactory.component import GDSDIR_TEMP
 
+from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
+
 host = "localhost"
 port = 8765
 
@@ -91,14 +94,23 @@ class LayoutViewServerEndpoint(WebSocketEndpoint):
             )
         return js
 
-    async def connection(
-        self, websocket: WebSocket, path: Optional[str] = None
-    ) -> None:
+    def load_gds(self):
         self.layout_view = lay.LayoutView()
         self.layout_view.load_layout(self.url)
         if self.layer_props is not None:
             self.layout_view.load_layer_props(str(self.layer_props))
         self.layout_view.max_hier()
+
+    def update_gds(self):
+        self.layout_view.active_cellview().layout().clear()
+        self.layout_view.load_layout(self.url)
+        self.layout_view.max_hier()
+
+    async def connection(
+        self, websocket: WebSocket, path: Optional[str] = None
+    ) -> None:
+        self.ws = websocket
+        self.load_gds()
 
         await websocket.send_text(
             json.dumps(
@@ -216,3 +228,45 @@ def get_layout_view(component: gf.Component):
     layout_view.load_layer_props(str(lyp_path))
     layout_view.max_hier()
     return layout_view
+
+
+class GdsEventHandler(FileSystemEventHandler):
+    """Captures pic.yml file change events."""
+
+    def __init__(self, callback: callable, logger=None) -> None:
+        """Initialize the YAML event handler."""
+        super().__init__()
+        self.callback = callback
+        self.logger = logger
+
+    def on_created(self, event) -> None:
+        super().on_created(event)
+
+        what = "directory" if event.is_directory else "file"
+        if what == "file" and event.src_path.endswith(".gds"):
+            self.logger.info(f"Created {what}: {event.src_path}")
+            self.callback(event.src_path)
+
+    def on_modified(self, event) -> None:
+        super().on_modified(event)
+
+        what = "directory" if event.is_directory else "file"
+        if what == "file" and event.src_path.endswith(".gds"):
+            self.logger.info(f"Modified {what}: {event.src_path}")
+            self.callback(event.src_path)
+
+
+class FileWatcherServerEndpoint(LayoutViewServerEndpoint):
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+
+        event_handler = GdsEventHandler(callback=self.show_new_gds, logger=logger)
+        observer = Observer()
+        observer.schedule(event_handler, GDSDIR_TEMP, recursive=True)
+        observer.start()
+
+        logger.info(f"Observing {GDSDIR_TEMP!r}")
+
+    def show_new_gds(self, filepath):
+        self.url = self.gds_path = filepath
+        self.update_gds()

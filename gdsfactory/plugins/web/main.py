@@ -15,12 +15,19 @@ from starlette.routing import WebSocketRoute
 
 import gdsfactory as gf
 from gdsfactory.config import PATH
-from gdsfactory.plugins.web.server import LayoutViewServerEndpoint, get_layout_view
+from gdsfactory.plugins.web.server import (
+    LayoutViewServerEndpoint,
+    get_layout_view,
+    FileWatcherServerEndpoint,
+)
 
 module_path = Path(__file__).parent.absolute()
 
 app = FastAPI(
-    routes=[WebSocketRoute("/view/{cell_name}/ws", endpoint=LayoutViewServerEndpoint)]
+    routes=[
+        WebSocketRoute("/view/{cell_name}/ws", endpoint=LayoutViewServerEndpoint),
+        WebSocketRoute("/current/ws", endpoint=FileWatcherServerEndpoint),
+    ]
 )
 app.add_middleware(ProxiedHeadersMiddleware)
 # app = FastAPI()
@@ -104,6 +111,30 @@ async def view_cell(request: Request, cell_name: str, variant: Optional[str] = N
             "request": request,
             "cell_name": str(cell_name),
             "variant": variant,
+            "title": "Viewer",
+            "initial_view": b64_data,
+            "component": component,
+            "url": get_url(request),
+        },
+    )
+
+
+@app.get("/current", response_class=HTMLResponse)
+async def view_current_cell(request: Request):
+    if "preview.app.github" in str(request.url):
+        return RedirectResponse(str(request.url).replace(".preview", ""))
+
+    component = gf.components.straight()
+    layout_view = get_layout_view(component)
+    pixel_data = layout_view.get_pixels_with_options(800, 400).to_png_data()
+    # pixel_data = layout_view.get_screenshot_pixels().to_png_data()
+    b64_data = base64.b64encode(pixel_data).decode("utf-8")
+    return templates.TemplateResponse(
+        "viewer.html",
+        {
+            "request": request,
+            "cell_name": component.name,
+            "variant": "",
             "title": "Viewer",
             "initial_view": b64_data,
             "component": component,
