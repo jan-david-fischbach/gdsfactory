@@ -1,0 +1,66 @@
+version: 1
+project:
+  title: GDSFactory
+  authors:
+    - name: GDSFactory
+  github: gdsfactory/gdsfactory
+  toc:
+    - file: index.md
+    - title: Introduction
+      children:
+        - file: getting_started.md
+          children:
+            - file: developer.md
+            - file: notebooks/_2_klayout.ipynb
+            - file: notebooks/_0_python.ipynb
+            - file: notebooks/_1_git.ipynb
+            - file: workflow.md
+            - file: notebooks/12_config.ipynb
+        - file: layout.md
+          children:
+            - file: notebooks/00_geometry.ipynb
+            - file: notebooks/01_references.ipynb
+            - file: notebooks/03_Path_CrossSection.ipynb
+            - file: notebooks/04_components_geometry.ipynb
+            - file: notebooks/04_components_pack.ipynb
+            - file: notebooks/04_routing.ipynb
+            - file: notebooks/04_routing_electrical.ipynb
+            - file: notebooks/07_mask.ipynb
+            - file: notebooks/11_best_practices.ipynb
+            - file: notebooks/03_cells_autoname_and_cache.ipynb
+            - file: notebooks/04_components_hierarchy.ipynb
+            - file: notebooks/04_components_shapes.ipynb
+            - file: notebooks/12_grid_snapping.ipynb
+        - file: schematic.md
+          children:
+            - file: notebooks/10_schematic.ipynb
+            - file: notebooks/10_yaml_component.ipynb
+        - file: pdk.md
+          children:
+            - file: notebooks/08_pdk.ipynb
+            - file: notebooks/03_layer_stack.ipynb
+            - file: notebooks/09_pdk_import.ipynb
+        - file: migration.md
+          children:
+            - file: notebooks/21_migration_guide_7_8.ipynb
+            - file: notebooks/22_migration_8.ipynb
+    - title: Plugins
+      children:
+        - url: https://gdsfactory.github.io/gplugins/
+          title: Plugins
+    - title: Reference
+      children:
+        - file: api
+        - file: api_routing
+        - file: components
+        - file: contribution.md
+        - file: changelog.md
+        - url: >-
+            https://gdsfactory.github.io/gdsfactory-photonics-training/index.html
+          title: gdsfactory-training
+        - url: https://gdsfactory.com
+          title: gdsfactory
+site:
+  options:
+    folders: true
+  template: book-theme
