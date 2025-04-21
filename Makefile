@@ -81,9 +81,6 @@ autopep8:
 
 docs:
 	uv run python docs/write_cells.py
-	# uv run pydoc-markdown -p gdsfactory -m gdsfactory > docs/api.md
-	# uv run pydoc-markdown -m gdsfactory.routing > docs/api_routing.md
-	# uv run pydoc-markdown -m gdsfactory.components > docs/api_components.md
 	cd docs && uv run myst build --execute
 
 live-docs: docs

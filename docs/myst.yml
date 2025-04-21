@@ -50,9 +50,17 @@ project:
           title: Plugins
     - title: Reference
       children:
-        - file: api
-        - file: api_routing
-        - file: components
+        - file: api/myst/api.myst.json
+          title: API
+          exclude: api/myst/gdsfactory-routing-**.myst.json
+          children:
+            - pattern: api/myst/gdsfactory-**.myst.json
+        - file: api/myst/api-routing.myst.json
+          title: Routing API
+          children:
+            - pattern: api/myst/gdsfactory-routing**.myst.json
+        - file: api/myst/components.myst.json
+          title: Components
         - file: contribution.md
         - file: changelog.md
         - url: >-
