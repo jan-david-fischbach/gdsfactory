@@ -81,10 +81,7 @@ autopep8:
 
 docs:
 	uv run python docs/write_cells.py
-	cd docs && uv run myst build --execute
-
-live-docs: docs
-	cd docs && uv run myst start --execute
+	cd docs && make html
 
 git-rm-merged:
 	git branch -D `git branch --merged | grep -v \* | xargs`

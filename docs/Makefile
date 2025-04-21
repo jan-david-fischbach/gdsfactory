@@ -8,5 +8,5 @@ repair-plot-directive:
 repair-code-blocks:
 	uv run python repair_code_blocks.py
 
-build: sphinx repair-plot-directive repair-code-blocks
-	uv run myst build --execute
+html: sphinx repair-plot-directive repair-code-blocks
+	uv run myst build --execute --html

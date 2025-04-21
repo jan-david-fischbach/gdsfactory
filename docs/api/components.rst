@@ -3578,4 +3578,3 @@ waveguides
   c = gf.components.wire_straight(length=10, npoints=2, cross_section='metal_routing').copy()
   c.draw_ports()
   c.plot()
-

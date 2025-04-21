@@ -42,7 +42,7 @@ dependencies = [
   "attrs",
   "graphviz",
   "pyglet<3",
-  "typing-extensions",
+  "typing-extensions"
 ]
 description = "python library to generate GDS layouts"
 keywords = ["eda", "photonics", "python"]
@@ -78,7 +78,7 @@ docs = [
   "Sphinx==7.4.7",
   "mystmd>=1.3.25",
   "sphinx-ext-mystmd>=0.0.0",
-  "jupyter-server>=2.15.0",
+  "jupyter-server>=2.15.0"
 ]
 full = [
   "gplugins[devsim,femwell,gmsh,meow,sax,schematic,tidy3d]~=1.1",
