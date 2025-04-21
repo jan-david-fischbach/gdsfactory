@@ -52,13 +52,12 @@ project:
       children:
         - file: api/myst/api.myst.json
           title: API
-          exclude: api/myst/gdsfactory-routing-**.myst.json
           children:
             - pattern: api/myst/gdsfactory-**.myst.json
-        - file: api/myst/api-routing.myst.json
+        - file: routing-api/myst/api-routing.myst.json
           title: Routing API
           children:
-            - pattern: api/myst/gdsfactory-routing**.myst.json
+            - pattern: routing-api/myst/gdsfactory-routing**.myst.json
         - file: api/myst/components.myst.json
           title: Components
         - file: contribution.md
