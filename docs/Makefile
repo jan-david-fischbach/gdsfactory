@@ -8,5 +8,11 @@ repair-plot-directive:
 repair-code-blocks:
 	uv run python repair_code_blocks.py
 
-html: sphinx repair-plot-directive repair-code-blocks
+repair-duplicate-identifiers:
+	uv run python repair_duplicate_identifiers.py
+
+html: sphinx repair-plot-directive repair-code-blocks repair-duplicate-identifiers
 	uv run myst build --execute --html
+
+myst: sphinx repair-plot-directive repair-code-blocks repair-duplicate-identifiers
+	uv run myst start

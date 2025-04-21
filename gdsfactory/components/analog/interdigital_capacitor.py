@@ -18,9 +18,7 @@ def interdigital_capacitor(
 ) -> Component:
     """Generates an interdigital capacitor with ports on both ends.
 
-    See for example Zhu et al., `Accurate circuit model of interdigital
-    capacitor and its application to design of new uasi-lumped miniaturized
-    filters with suppression of harmonic resonance`, doi: 10.1109/22.826833.
+    See for example https://doi.org/10.1109/22.826833.
 
     Note:
         ``finger_length=0`` effectively provides a plate capacitor.
